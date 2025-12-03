@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joue avec Eric - Inscription</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo">
+            <h1>Eric</h1>
+            <div class="logo-line"></div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="form-wrapper">
+                <!-- Tab Buttons -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="login">Se Connecter</button>
+                    <button class="tab-btn" data-tab="register">Créer un Compte</button>
+                </div>
+
+                <!-- Login Tab -->
+                <div class="tab-content active" id="login">
+                    <h2>Se Connecter à Eric</h2>
+                    <form id="loginForm" class="form">
+                        <div class="form-group">
+                            <label for="loginEmail">Email:</label>
+                            <input type="email" id="loginEmail" name="email" placeholder="votre@email.com" required>
+                            <span class="error-message" id="loginEmailError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Mot de passe:</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="loginPassword" name="password" placeholder="Votre mot de passe" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')">👁</button>
+                            </div>
+                            <span class="error-message" id="loginPasswordError"></span>
+                        </div>
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="rememberMe" name="rememberMe">
+                            <label for="rememberMe" class="checkbox-label">Se souvenir de moi</label>
+                        </div>
+                        <!-- Simple Captcha -->
+                        <div class="form-group captcha">
+                            <div class="captcha-box">
+                                <input type="checkbox" id="captcha" name="captcha">
+                                <label for="captcha">Je ne suis pas un robot</label>
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect fill='%239AC92E' width='50' height='50'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dy='.3em'%3E✓%3C/text%3E%3C/svg%3E" alt="reCAPTCHA">
+                            </div>
+                            <span class="error-message" id="captchaError"></span>
+                        </div>
+                        <button type="submit" class="btn-submit">Se Connecter</button>
+                    </form>
+                </div>
+
+                <!-- Register Tab -->
+                <div class="tab-content" id="register">
+                    <h2>Créer un Compte Eric</h2>
+                    <p class="info-text">Remplis tous les champs pour rejoindre Eric dans ses aventures!</p>
+                    <form id="registerForm" class="form">
+                        <!-- Personal Info -->
+                        <fieldset class="form-section">
+                            <legend>Informations Personnelles</legend>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">Prénom:</label>
+                                    <input type="text" id="firstName" name="firstName" placeholder="Ton prénom" required>
+                                    <span class="error-message" id="firstNameError"></span>
+                                    <span class="success-message" id="firstNameSuccess"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Nom:</label>
+                                    <input type="text" id="lastName" name="lastName" placeholder="Ton nom" required>
+                                    <span class="error-message" id="lastNameError"></span>
+                                    <span class="success-message" id="lastNameSuccess"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="age">Âge:</label>
+                                <input type="number" id="age" name="age" min="1" max="120" placeholder="Quel âge as-tu?" required>
+                                <span class="error-message" id="ageError"></span>
+                                <span class="success-message" id="ageSuccess"></span>
+                                <p class="info-small">⚠️ Tu dois avoir entre 5 et 13 ans pour rejoindre Eric</p>
+                            </div>
+                        </fieldset>
+
+                        <!-- Email & Password -->
+                        <fieldset class="form-section">
+                            <legend>Identifiants</legend>
+                            <div class="form-group">
+                                <label for="regEmail">Email:</label>
+                                <input type="email" id="regEmail" name="email" placeholder="votre@email.com" required>
+                                <span class="error-message" id="regEmailError"></span>
+                                <span class="success-message" id="regEmailSuccess"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="regPassword">Mot de passe:</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="regPassword" name="password" placeholder="Crée un mot de passe fort" required>
+                                    <button type="button" class="toggle-password" onclick="togglePassword('regPassword')">👁</button>
+                                </div>
+                                <span class="error-message" id="regPasswordError"></span>
+                                <div class="password-requirements">
+                                    <p>Ton mot de passe doit contenir:</p>
+                                    <div class="req-item" id="reqLength">
+                                        <span class="req-icon">○</span>
+                                        <span>Au moins 8 caractères</span>
+                                    </div>
+                                    <div class="req-item" id="reqUppercase">
+                                        <span class="req-icon">○</span>
+                                        <span>Une lettre majuscule</span>
+                                    </div>
+                                    <div class="req-item" id="reqLowercase">
+                                        <span class="req-icon">○</span>
+                                        <span>Une lettre minuscule</span>
+                                    </div>
+                                    <div class="req-item" id="reqNumber">
+                                        <span class="req-icon">○</span>
+                                        <span>Un chiffre</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="regPasswordConfirm">Confirme le mot de passe:</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="regPasswordConfirm" name="passwordConfirm" placeholder="Confirme ton mot de passe" required>
+                                    <button type="button" class="toggle-password" onclick="togglePassword('regPasswordConfirm')">👁</button>
+                                </div>
+                                <span class="error-message" id="regPasswordConfirmError"></span>
+                            </div>
+                        </fieldset>
+
+                        <!-- Parental Consent -->
+                        <fieldset class="form-section">
+                            <legend>Autorisation Parentale</legend>
+                            <div class="form-group checkbox-large">
+                                <input type="checkbox" id="parentalConsent" name="parentalConsent" required>
+                                <label for="parentalConsent" class="checkbox-label-large">
+                                    ✓ J'ai l'autorisation de mes parents pour créer ce compte
+                                </label>
+                                <span class="error-message" id="parentalConsentError"></span>
+                            </div>
+                            <div class="form-group checkbox">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <label for="terms" class="checkbox-label">
+                                    ✓ J'accepte les conditions d'utilisation
+                                </label>
+                                <span class="error-message" id="termsError"></span>
+                            </div>
+                        </fieldset>
+
+                        <!-- Captcha -->
+                        <div class="form-group captcha">
+                            <div class="captcha-box">
+                                <input type="checkbox" id="regCaptcha" name="captcha" required>
+                                <label for="regCaptcha">Je ne suis pas un robot</label>
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect fill='%239AC92E' width='50' height='50'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dy='.3em'%3E✓%3C/text%3E%3C/svg%3E" alt="reCAPTCHA">
+                            </div>
+                            <span class="error-message" id="regCaptchaError"></span>
+                        </div>
+                        <button type="submit" class="btn-submit">Créer mon Compte</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h3>🎉 Bienvenue chez Eric!</h3>
+            <p id="successMessage"></p>
+            <button onclick="closeModal()">Fermer</button>
+        </div>
+    </div>
+
+    <script src="jd.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avec Erik - Gestion des Déchets</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <header>
+    <nav class="navbar">
+      <img src="image/transparent-Photoroom.png" class="logo" width="100px" height="100px" alt="logo">
+      <div class="nav-links">
+        <ul>
+          <li class="active"><a href="#accueil" class="nav-link-btn">ACCUEIL</a></li>
+          <li><a href="#dechets" class="nav-link-btn">LES DÉCHETS</a></li>
+          <li><a href="#bons" class="nav-link-btn">LES BONS GESTES</a></li>
+          <li><a href="#parcours" class="nav-link-btn">LE PARCOURS DES DECHETS</a></li>
+          <li><a href="#jeu" class="nav-link-btn">JOUER</a></li>
+          <li><a href="#quiz" class="nav-link-btn">QUIZ</a></li>
+          <li><a class="btn-jouer"  href="inscription.html" role="button">SIGN UP</a></li>
+        </ul>
+      </div>
+      <img src="image/menu.png" alt="menu" class="menu-hambourger">
+    </nav>
+  </header>
+
+  
+  <div class="page-indicator" aria-hidden="true">
+    <div class="circle" data-target="accueil"></div>
+    <div class="circle" data-target="dechets"></div>
+    <div class="circle" data-target="bons"></div>
+    <div class="circle" data-target="parcours"></div>
+    <div class="circle" data-target="jeu"></div>
+    
+  </div>
+
+
+  
+  <section id="dechets" class="section center-section">
+    <br><br><br><br><br>
+    <div class="video-card">
+      <video controls playsinline controlsList="nodownload">
+        <source src="Apprendre à trier nos déchets _ un grand geste pour notre planète!.mp4" type="video/mp4">
+        Ton navigateur ne supporte pas la lecture vidéo.
+      </video>
+    </div>
+  </section>
+
+ 
+  <section id="bons" class="section center-section">
+  <br><br><br><br><br>
+    <div class="gestes-grid">
+      <div class="geste-card"><img src="image/e1.png" alt="geste1"><p>NETOYER TES OUTILS</p></div>
+      <div class="geste-card"><img src="image/e2.png" alt="geste2"><p>DONNE TES JOUETS</p></div>
+      <div class="geste-card"><img src="image/e3.png" alt="geste3"><p>REPARE TON VELO</p></div>
+      <div class="geste-card"><img src="image/e4.png" alt="geste4"><p>CHOISIS TON GOUTER</p></div>
+      <div class="geste-card"><img src="image/e5.png" alt="geste5"><p>IMPRIMER RECTO VERSO</p></div>
+      <div class="geste-card"><img src="image/e6.png" alt="geste6"><p>RECHARGE TES PILES</p></div>
+    </div>
+  </section>
+
+ 
+  <section id="parcours" class="section center-section">
+   <br><br><br>
+    <div class="parcours-frame" id="parcours-frame">
+      <button class="parc-arrow left" id="parc-left" aria-label="Précédent">⟵</button>
+      <div class="parc-image-wrap">
+        <img src="image/etape1.jpg" id="parc-image" alt="Étape du parcours">
+      </div>
+      <button class="parc-arrow right" id="parc-right" aria-label="Suivant">⟶</button>
+    </div>
+    <p class="small-note">Clique sur les flèches pour découvrir les 5 étapes du recyclage ♻️</p>
+  </section>
+
+  
+  <section id="jeu" class="section center-section">
+    
+    <a class="btn-jouer" href="joue.html" role="button">Jouer avec Erik</a>
+  </section>
+
+  
+  <section id="quiz" class="section center-section">
+   <br><br><br>
+    <div id="quiz-card" class="quiz-card">
+      <div id="question-number" class="q-number">Question 1 / 5</div>
+      <div id="question-text" class="q-text"></div>
+      <form id="answers-form" class="answers-form" autocomplete="off"></form>
+      <div class="quiz-controls">
+        <button id="prev-btn" class="ghost-btn" type="button" aria-label="Précédent">Précédent</button>
+        <button id="next-btn" class="main-btn" type="button" aria-label="Suivant">Suivant</button>
+      </div>
+      <div id="quiz-result" class="quiz-result" aria-live="polite"></div>
+    </div>
+    <p class="small-note">À la fin tu auras ton score !</p>
+  </section>
+
+  
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section info">
+        <h3>Site de Eric</h3>
+        <p>Œuvrer pour un avenir meilleur en Algérie.</p>
+        <div class="social-icons">
+          <a href="https://facebook.com" aria-label="Facebook" class="social-link">f</a>
+          <a href="https://instagram.com" aria-label="Instagram" class="social-link">📸</a>
+          <a href="https://twitter.com" aria-label="Twitter" class="social-link">𝕏</a>
+          <a href="https://linkedin.com" aria-label="LinkedIn" class="social-link">in</a>
+        </div>
+      </div>
+
+      <div class="footer-section contact">
+        <h3>Contact</h3>
+        <p><span class="icon">✉️</span> eric.recyclage@gmail.com</p>
+        <p><span class="icon">📞</span> +213 6 32 52 47 94</p>
+        <p><span class="icon">📍</span> Oran, Algérie</p>
+      </div>
+
+      <div class="footer-section logos">
+        <h3>Nos Partenaires</h3>
+        <div class="partner-logos">
+          <img src="image/photo_2025-11-30_00-52-02.jpg" alt="Logo UNICEF" class="logo-unicef">
+          <img src="image/photo_2025-11-30_00-52-05.jpg" alt="Logo UNIIVERSITE" class="logo-universite">
+          <img src="image/logodd-Photoroom.png" alt="Logo IGCB" class="logo-igcb">
+          <img src="image/photo_2025-11-30_00-55-12.jpg" alt="Logo Ministère de l'Éducation DZ" class="logo-education">
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 Site de Eric. Tous droits réservés.</p>
+    </div>
+  </footer>
+
+  
+  <script src="script.js"></script>
+</body>
+</html>

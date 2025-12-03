@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Jeu : Trier les déchets</title>
+<style>
+  /* --- Styles généraux --- */
+  :root{
+    --accent:#2b8a3e;
+    --muted:#f2f4f3;
+    --card:#ffffff;
+  }
+  html,body{height:100%; margin:0; font-family: "Segoe UI", Roboto, Arial, sans-serif; background:#e8f0ea;}
+  body{
+    /* background nommé image1 - place image1.jpg dans le dossier */
+    background-image: url("image1.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display:flex;
+    align-items:stretch;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .container{
+    width:100%;
+    max-width:1000px;
+    background: rgba(255,255,255,0.85);
+    border-radius:16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  header h1{font-size:1.4rem; margin:0; color:#0b4723;}
+  .score{
+    background:var(--card);
+    padding:8px 12px;
+    border-radius:10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    font-weight:600;
+  }
+
+  /* --- ligne des déchets (icônes 40x40) --- */
+  .trash-row{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    padding:8px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,250,0.9));
+    border-radius:12px;
+  }
+  .draggable{
+    width:100px;
+    height:100px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:6px;
+    cursor:grab;
+    user-select:none;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    background:var(--muted);
+  }
+  .draggable img{width:100%; height:100%; object-fit:contain; display:block;}
+
+  /* --- zone poubelles --- */
+  .bins{
+    display:flex;
+    gap:18px;
+    justify-content:space-around;
+    align-items:flex-end;
+    padding:18px;
+  }
+  .bin{
+    width:180px;
+    height:220px;
+    background: linear-gradient(180deg,#fff,#f6f6f6);
+    border-radius:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+    padding:12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition:transform .15s ease, box-shadow .15s ease;
+    position:relative;
+  }
+  .bin.dragover{
+    transform:translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  }
+  .bin img.bin-img{width:120px; height:120px; object-fit:contain; pointer-events:none;}
+  .bin .label{
+    margin-top:6px;
+    font-weight:700;
+    color:#1b3b2a;
+  }
+
+  /* feedback correct / incorrect */
+  .feedback{
+    position:absolute;
+    top:8px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(255,255,255,0.95);
+    padding:6px 10px;
+    border-radius:10px;
+    font-size:0.9rem;
+    box-shadow:0 6px 14px rgba(0,0,0,0.08);
+    display:none;
+  }
+  .feedback.show{display:block;}
+
+  /* bas de la page (boutons) */
+  .controls{
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+    align-items:center;
+  }
+  button{
+    padding:10px 14px;
+    border-radius:10px;
+    border:0;
+    background:var(--accent);
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+  }
+  button.secondary{
+    background:#6c7575;
+  }
+
+  /* responsive */
+  @media (max-width:700px){
+    .bins{flex-direction:column; gap:12px;}
+    .bin{width:100%; height:140px; flex-direction:row; justify-content:space-between; padding:10px;}
+    .bin img.bin-img{width:72px; height:72px;}
+  }
+</style>
+</head>
+<body>
+  <div class="container" role="main" aria-label="Jeu de tri des déchets">
+    <header>
+      <h1>Trier les déchets ♻️</h1>
+      <div class="score" id="score">Score : 0 / 4</div>
+    </header>
+
+    <!-- ligne des déchets en haut -->
+    <div class="trash-row" id="trashRow" aria-hidden="false">
+      
+      <div class="draggable" draggable="true" id="plastique1" data-type="plastique" tabindex="0" aria-grabbed="false" role="button" title="plastique 1">
+        <img src="dechet/plas1.avif" alt="plastique 1">
+      </div>
+      <div class="draggable" draggable="true" id="plastique2" data-type="plastique" tabindex="0" aria-grabbed="false" role="button" title="plastique 2">
+        <img src="dechet/plas2.jpg" alt="plastique 2">
+      </div>
+      <div class="draggable" draggable="true" id="carton" data-type="carton" tabindex="0" aria-grabbed="false" role="button" title="carton">
+        <img src="dechet/papier.webp" alt="carton">
+      </div>
+      <div class="draggable" draggable="true" id="verre" data-type="verre" tabindex="0" aria-grabbed="false" role="button" title="verre">
+        <img src="dechet/verre.png" alt="verre">
+      </div>
+    </div>
+
+    <!-- zone des poubelles -->
+    <section class="bins" aria-label="Poubelles">
+      <div class="bin" id="bin-plast" data-accept="plastique" aria-dropeffect="move">
+        <div class="feedback" id="fb-plast"></div>
+       
+        <img class="bin-img" src="dechet/cj.png" alt="Poubelle plastique">
+        <div class="label">Plastique</div>
+      </div>
+
+      <div class="bin" id="bin-carton" data-accept="carton" aria-dropeffect="move">
+        <div class="feedback" id="fb-carton"></div>
+        <img class="bin-img" src="dechet/cb.png" alt="Poubelle carton">
+        <div class="label">Carton</div>
+      </div>
+
+      <div class="bin" id="bin-verre" data-accept="verre" aria-dropeffect="move">
+        <div class="feedback" id="fb-verre"></div>
+        <img class="bin-img" src="dechet/cv.png" alt="Poubelle verre">
+        <div class="label">Verre</div>
+      </div>
+    </section>
+
+    <div class="controls">
+      <button id="resetBtn" class="secondary">Réinitialiser</button>
+      <button id="shuffleBtn">Mélanger</button>
+    </div>
+  </div>
+
+<script>
+/*
+  Jeu de tri - JS
+  - utilise HTML5 Drag & Drop
+  - fallback tactile (touch) : on commence un "drag" avec touchstart et on dépose via touchend
+  - correspondances correctes : plastique1/plastique2 -> plastique, carton->carton, verre->verre
+*/
+
+/* --- variables --- */
+const items = Array.from(document.querySelectorAll('.draggable'));
+const bins = Array.from(document.querySelectorAll('.bin'));
+const scoreEl = document.getElementById('score');
+let score = 0;
+const total = items.length;
+
+/* --- helpers --- */
+function updateScore(){
+  scoreEl.textContent = `Score : ${score} / ${total}`;
+}
+
+/* --- drag & drop pour desktop --- */
+items.forEach(item=>{
+  item.addEventListener('dragstart', ev=>{
+    ev.dataTransfer.setData('text/plain', item.id);
+    item.classList.add('dragging');
+    item.setAttribute('aria-grabbed','true');
+  });
+  item.addEventListener('dragend', ev=>{
+    item.classList.remove('dragging');
+    item.setAttribute('aria-grabbed','false');
+  });
+});
+
+/* bins events */
+bins.forEach(bin=>{
+  bin.addEventListener('dragover', ev=>{
+    ev.preventDefault();
+    bin.classList.add('dragover');
+  });
+  bin.addEventListener('dragleave', ev=>{
+    bin.classList.remove('dragover');
+  });
+  bin.addEventListener('drop', ev=>{
+    ev.preventDefault();
+    bin.classList.remove('dragover');
+    const id = ev.dataTransfer.getData('text/plain');
+    handleDrop(id, bin);
+  });
+});
+
+/* --- fonction de traitement --- */
+function handleDrop(itemId, bin){
+  const item = document.getElementById(itemId);
+  if(!item) return;
+
+  const itemType = item.dataset.type;
+  const accept = bin.dataset.accept;
+
+  const feedback = bin.querySelector('.feedback');
+
+  if(itemType === accept){
+    // correct
+    feedback.textContent = "✔ Bien !";
+    feedback.classList.add('show');
+    setTimeout(()=> feedback.classList.remove('show'), 1200);
+    // supprimer l'élément ou le rendre non draggable
+    item.style.opacity = "0.5";
+    item.draggable = false;
+    item.tabIndex = -1;
+    // animer vers la poubelle : on clone pour préserver layout
+    const clone = item.cloneNode(true);
+    clone.style.position = 'absolute';
+    clone.style.left = item.getBoundingClientRect().left + 'px';
+    clone.style.top = item.getBoundingClientRect().top + 'px';
+    clone.style.transition = 'all .6s ease';
+    document.body.appendChild(clone);
+    const targetRect = bin.getBoundingClientRect();
+    setTimeout(()=>{
+      clone.style.left = (targetRect.left + (targetRect.width - 40)/2) + 'px';
+      clone.style.top = (targetRect.top + 20) + 'px';
+      clone.style.transform = 'scale(.6)';
+      clone.style.opacity = '0.6';
+    },10);
+    setTimeout(()=> clone.remove(),700);
+
+    // retirer l'élément de la zone si nécessaire
+    item.style.pointerEvents = 'none';
+    score++;
+    updateScore();
+    if(score === total){
+      setTimeout(()=> alert("Bravo ! Tu as trié tous les déchets 🎉"), 300);
+    }
+  } else {
+    // incorrect
+    feedback.textContent = "✖ Non : ce n'est pas ici";
+    feedback.classList.add('show');
+    setTimeout(()=> feedback.classList.remove('show'), 1400);
+    // petit signal visuel
+    bin.classList.add('shake');
+    setTimeout(()=> bin.classList.remove('shake'), 500);
+  }
+}
+
+/* --- shuffle & reset --- */
+document.getElementById('resetBtn').addEventListener('click', resetGame);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleItems);
+
+function resetGame(){
+  // replacer les éléments dans trashRow, rendre draggable
+  const row = document.getElementById('trashRow');
+  // supprimer les items actuels du DOM s'ils ont été désactivés et recréer à partir d'une liste
+  // pour simplicité, on remet chaque item dans row et restaure propriétés
+  items.forEach(it=>{
+    it.style.opacity = '1';
+    it.draggable = true;
+    it.tabIndex = 0;
+    it.style.pointerEvents = 'auto';
+    row.appendChild(it);
+  });
+  score = 0;
+  updateScore();
+}
+
+function shuffleItems(){
+  const row = document.getElementById('trashRow');
+  const nodes = Array.from(row.children);
+  for (let i = nodes.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    row.appendChild(nodes[j]);
+    nodes.splice(j,1);
+  }
+}
+
+/* --- Support tactile (mobile) : simple fallback --- */
+/* On va utiliser touchstart pour sélectionner, et touchend pour détecter la poubelle la plus proche */
+let touchDrag = null;
+items.forEach(item=>{
+  item.addEventListener('touchstart', ev=>{
+    touchDrag = item;
+    item.classList.add('dragging');
+  }, {passive:true});
+
+  item.addEventListener('touchmove', ev=>{
+    // empêcher le scroll quand l'enfant déplace l'image intentionnellement
+    if(touchDrag) ev.preventDefault();
+  }, {passive:false});
+
+  item.addEventListener('touchend', ev=>{
+    if(!touchDrag) return;
+    item.classList.remove('dragging');
+    // trouver la poubelle la plus proche du point de toucher
+    const touch = ev.changedTouches[0];
+    const x = touch.clientX, y = touch.clientY;
+    let closest = null, minDist = Infinity;
+    bins.forEach(bin=>{
+      const r = bin.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top + r.height/2;
+      const d = Math.hypot(cx - x, cy - y);
+      if(d < minDist){
+        minDist = d;
+        closest = bin;
+      }
+    });
+    // si la distance est raisonnable (ex: < 180px), considérer comme un drop
+    if(closest && minDist < 220){
+      handleDrop(touchDrag.id, closest);
+    }
+    touchDrag = null;
+  }, {passive:false});
+});
+
+/* initialisation */
+updateScore();
+</script>
+</body>
+</html>
